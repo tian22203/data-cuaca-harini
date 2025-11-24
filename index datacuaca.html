@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+font-family: Arial, sans-serif;
+background: linear-gradient(135deg, #4facfe, #00f2fe);
+color: #fff;
+text-align: center;
+padding: 30px;
+}
+.card {
+margin: auto;
+background: rgba(255, 255, 255, 0.2);
+padding: 25px;
+width: 330px;
+border-radius: 20px;
+backdrop-filter: blur(10px);
+box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+h1 { margin-bottom: 20px; }
+p { font-size: 18px; }
+</style>
+</head>
+<body>
+<h1>🌤 Cuaca Saat Ini</h1>
+
+
+<div class="card">
+<p id="city">Kota: -</p>
+<p id="temp">Suhu: -</p>
+<p id="condition">Kondisi: -</p>
+<p id="humidity">Kelembapan: -</p>
+<p id="wind">Angin: -</p>
+<p id="rain">Curah Hujan: -</p>
+<p id="rainStatus">Status Hujan: -</p>
+</div>
+
+
+<script>
+async function loadWeather() {
+const apiKey = "96461f32bd61494c939af058e518653c";
+const city = "Kediri";
+
+
+const url = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&units=metric&appid=${apiKey}&lang=id`;
+const res = await fetch(url);
+const data = await res.json();
+
+
+const current = data.list[0];
+
+
+document.getElementById("city").innerText = "Kota: " + city;
+document.getElementById("temp").innerText = "Suhu: " + current.main.temp + "°C";
+document.getElementById("condition").innerText = "Kondisi: " + current.weather[0].description;
+document.getElementById("humidity").innerText = "Kelembapan: " + current.main.humidity + "%";
+document.getElementById("wind").innerText = "Angin: " + current.wind.speed + " m/s";
+
+
+const rain = current.rain ? current.rain["3h"] : 0;
+document.getElementById("rain").innerText = "Curah Hujan: " + rain + " mm";
+document.getElementById("rainStatus").innerText =
+rain === 0 ? "Tidak Ada Hujan" : rain < 10 ? "Hujan Ringan" : rain < 20 ? "Hujan Sedang" : "Hujan Lebat";
+}
+
+
+loadWeather();
+</script>
+</body>
+</html>
